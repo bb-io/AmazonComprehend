@@ -75,6 +75,28 @@ public class DetectActions
         var piiEntities = response.Entities.Select(x => new PiiModel(x, inputText)).ToArray();
 
         return new(piiEntities);
+    }    
+    
+    [Action("Blur personally identifiable information", Description = "Blur personally identifiable information in a document")]
+    public async Task<BlurPiiResponse> BlurPii(
+        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
+        [ActionParameter] DetectRequestModel requestModel)
+    {
+        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+
+        var inputText = requestModel.Text;
+        var request = new DetectPiiEntitiesRequest
+        {
+            Text = inputText,
+            LanguageCode = requestModel.LanguageCode,
+        };
+
+        var response = await RequestsHandler.ExecutePollyAction(client.DetectPiiEntitiesAsync, request);
+        var piiEntities = response.Entities.Select(x => new PiiModel(x, inputText)).ToList();
+
+        piiEntities.ForEach(x => inputText = inputText.Replace(x.Text, new string('*', x.Text.Length)));
+        
+        return new(inputText);
     }
     
     [Action("Detect syntactical elements", Description = "Detect syntactical elements of a document")]
@@ -96,8 +118,25 @@ public class DetectActions
         return new(syntaxElements);
     }
     
-    [Action("Detect dominant language", Description = "Detect the dominant language in a document")]
-    public async Task<LanguageResponse> DetectDominantLanguage(
+    [Action("Detect one dominant language", Description = "Detect one dominant language in a document")]
+    public async Task<LanguageModel> DetectDominantLanguage(
+        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
+        [ActionParameter] [Display("Text")] string text)
+    {
+        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+
+        var request = new DetectDominantLanguageRequest
+        {
+            Text = text
+        };
+
+        var response = await RequestsHandler.ExecutePollyAction(client.DetectDominantLanguageAsync, request);
+
+        return new(response.Languages.MaxBy(x => x.Score));
+    }    
+    
+    [Action("Detect dominant languages", Description = "Detect the dominant languages in a document")]
+    public async Task<LanguageResponse> DetectDominantLanguages(
         IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] [Display("Text")] string text)
     {
