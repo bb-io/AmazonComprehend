@@ -11,20 +11,27 @@ using Apps.AmazonComprehend.Utils;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Invocation;
 
 namespace Apps.AmazonComprehend.Actions;
 
 [ActionList]
-public class DetectActions
+public class DetectActions : BaseInvocable
 {
+    private IEnumerable<AuthenticationCredentialsProvider> Creds =>
+        InvocationContext.AuthenticationCredentialsProviders;
+
+    public DetectActions(InvocationContext invocationContext) : base(invocationContext)
+    {
+    }
+
     #region Actions
 
     [Action("Detect entities", Description = "Detect entities in a document")]
     public async Task<EntitiesResponseModel> DetectEntities(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectEntitiesRequest
         {
@@ -37,13 +44,12 @@ public class DetectActions
 
         return new(entities);
     }
-    
+
     [Action("Detect key phrases", Description = "Detect key phrases in a document")]
     public async Task<KeyPhrasesResponse> DetectKeyPhrases(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectKeyPhrasesRequest
         {
@@ -56,13 +62,13 @@ public class DetectActions
 
         return new(keyPhrases);
     }
-    
-    [Action("Detect personally identifiable information", Description = "Detect personally identifiable information in a document")]
+
+    [Action("Detect personally identifiable information",
+        Description = "Detect personally identifiable information in a document")]
     public async Task<PiiResponse> DetectPii(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var inputText = requestModel.Text;
         var request = new DetectPiiEntitiesRequest
@@ -75,14 +81,14 @@ public class DetectActions
         var piiEntities = response.Entities.Select(x => new PiiModel(x, inputText)).ToArray();
 
         return new(piiEntities);
-    }    
-    
-    [Action("Blur personally identifiable information", Description = "Blur personally identifiable information in a document")]
+    }
+
+    [Action("Blur personally identifiable information",
+        Description = "Blur personally identifiable information in a document")]
     public async Task<BlurPiiResponse> BlurPii(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var inputText = requestModel.Text;
         var request = new DetectPiiEntitiesRequest
@@ -95,16 +101,15 @@ public class DetectActions
         var piiEntities = response.Entities.Select(x => new PiiModel(x, inputText)).ToList();
 
         piiEntities.ForEach(x => inputText = inputText.Replace(x.Text, new string('*', x.Text.Length)));
-        
+
         return new(inputText);
     }
-    
+
     [Action("Detect syntactical elements", Description = "Detect syntactical elements of a document")]
     public async Task<SyntaxElementsResponse> DetectSyntacticalElements(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectSyntaxRequest
         {
@@ -117,13 +122,12 @@ public class DetectActions
 
         return new(syntaxElements);
     }
-    
+
     [Action("Detect one dominant language", Description = "Detect one dominant language in a document")]
     public async Task<LanguageModel> DetectDominantLanguage(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] [Display("Text")] string text)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectDominantLanguageRequest
         {
@@ -133,14 +137,13 @@ public class DetectActions
         var response = await RequestsHandler.ExecutePollyAction(client.DetectDominantLanguageAsync, request);
 
         return new(response.Languages.MaxBy(x => x.Score));
-    }    
-    
+    }
+
     [Action("Detect dominant languages", Description = "Detect the dominant languages in a document")]
     public async Task<LanguageResponse> DetectDominantLanguages(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] [Display("Text")] string text)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectDominantLanguageRequest
         {
@@ -152,13 +155,12 @@ public class DetectActions
 
         return new(languages);
     }
-    
+
     [Action("Detect sentiment", Description = "Detect the sentiment of a document")]
     public async Task<SentimentResponse> DetectSentiment(
-        IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
         [ActionParameter] DetectRequestModel requestModel)
     {
-        var client = ComprehendClientFactory.CreateClientWithCreds(authenticationCredentialsProviders.ToArray());
+        var client = ComprehendClientFactory.CreateClientWithCreds(Creds.ToArray());
 
         var request = new DetectSentimentRequest
         {
