@@ -4,10 +4,15 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Product>Blackbird Amazon Comprehend</Product>
+        <Description>Helps to derive and understand valuable insights from text within documents</Description>
+        <Version>1.0.0</Version>
+        <AssemblyName>Apps.AmazonComprehend</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="AWSSDK.Comprehend" Version="3.7.104.32" />
+      <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.2.0-alpha4" />
       <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.3" />
     </ItemGroup>
 
