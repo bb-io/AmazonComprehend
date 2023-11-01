@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>Amazon Comprehend</Product>
         <Description>Helps to derive and understand valuable insights from text within documents</Description>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <AssemblyName>Apps.AmazonComprehend</AssemblyName>
     </PropertyGroup>
 
