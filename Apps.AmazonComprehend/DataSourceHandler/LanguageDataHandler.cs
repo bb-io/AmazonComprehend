@@ -1,22 +1,23 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.AmazonComprehend.DataSourceHandler;
 
-public class LanguageDataHandler : EnumDataHandler
+public class LanguageDataHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
-    {
-        { "ar", "Arabic" },
-        { "de", "German" },
-        { "en", "English" },
-        { "es", "Spanish" },
-        { "fr", "French" },
-        { "hi", "Hindi" },
-        { "it", "Italian" },
-        { "ja", "Japanese" },
-        { "ko", "Korean" },
-        { "pt", "Portuguese" },
-        { "zh", "Chinese" },
-        { "zh-TW", "Traditional Chinese" }
-    };
+    public Dictionary<string, string> GetData()
+        => new()
+        {
+            { "ar", "Arabic" },
+            { "de", "German" },
+            { "en", "English" },
+            { "es", "Spanish" },
+            { "fr", "French" },
+            { "hi", "Hindi" },
+            { "it", "Italian" },
+            { "ja", "Japanese" },
+            { "ko", "Korean" },
+            { "pt", "Portuguese" },
+            { "zh", "Chinese" },
+            { "zh-TW", "Traditional Chinese" }
+        };
 }
