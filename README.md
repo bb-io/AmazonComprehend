@@ -6,7 +6,17 @@ Blackbird is the new automation backbone for the language technology industry. B
 
 <!-- begin docs -->
 
-Documentation coming soon.
+## Actions
+
+### Detect
+-**Detect entities** Detect entities in a document
+-**Detect key phrases** Detect key phrases in a document
+-**Detect personally identifiable information** Detect personally identifiable information in a document
+-**Blur personally identifiable information** Blur personally identifiable information in a document
+-**Detect syntactical elements** Detect syntactical elements of a document
+-**Detect one dominant language** Detect one dominant language in a document
+-**Detect dominant languages** Detect the dominant languages in a document
+-**Detect sentiment** Detect the sentiment of a document
 
 ## Feedback
 
