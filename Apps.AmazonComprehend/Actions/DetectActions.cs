@@ -15,7 +15,7 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 
 namespace Apps.AmazonComprehend.Actions;
 
-[ActionList]
+[ActionList("Detect")]
 public class DetectActions : BaseInvocable
 {
     private IEnumerable<AuthenticationCredentialsProvider> Creds =>
