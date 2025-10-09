@@ -2,6 +2,7 @@
 using Amazon.Comprehend;
 using Apps.AmazonComprehend.Constants;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.AmazonComprehend.Factories;
 
@@ -14,7 +15,7 @@ public static class ComprehendClientFactory
         var secret = authenticationCredentialsProviders.First(p => p.KeyName == "access_secret");
 
         if (string.IsNullOrEmpty(key.Value) || string.IsNullOrEmpty(secret.Value))
-            throw new Exception(ExceptionMessages.CredentialsMissing);
+            throw new PluginApplicationException(ExceptionMessages.CredentialsMissing);
 
         return new(key.Value, secret.Value, new AmazonComprehendConfig
         {
