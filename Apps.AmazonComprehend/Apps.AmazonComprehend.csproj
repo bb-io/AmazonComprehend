@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <Product>Amazon Comprehend</Product>
     <Description>Helps to derive and understand valuable insights from text within documents</Description>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <AssemblyName>Apps.AmazonComprehend</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
@@ -15,5 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\README.md" Link="README.md" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>
